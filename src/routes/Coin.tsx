@@ -1,10 +1,16 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import { Link, Route, Switch, useLocation, useParams, useRouteMatch } from 'react-router-dom';
-import styled from 'styled-components';
+
 import { fetchCoinInfo, fetchCoinTickers } from '../api';
+
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isDarkAtom } from '../atoms';
+
 import Chart from './Chart';
 import Price from './Price';
+
+import styled from 'styled-components';
 
 const Container = styled.div`
   position: relative;
@@ -14,6 +20,7 @@ const Container = styled.div`
 `;
 
 const Header = styled.header`
+  position: relative;
   height: 10vh;
   display: flex;
   justify-content: center;
@@ -34,7 +41,7 @@ const Overview = styled.div`
   padding: 10px 20px;
   display: flex;
   justify-content: space-between;
-  background: rgba(0, 0, 0, 0.5);
+  background: ${(props) => props.theme.boxColor};
   border-radius: 10px;
 `;
 
@@ -64,7 +71,7 @@ const Tabs = styled.div`
 const Tab = styled.div<{ isActive: boolean }>`
   padding: 10px 0;
   width: 210px;
-  background: rgba(0, 0, 0, 0.5);
+  background: ${(props) => props.theme.boxColor};
   color: ${(props) => (props.isActive ? props.theme.accentColor : props.theme.textColor)};
   border-radius: 10px;
   text-align: center;
@@ -85,6 +92,38 @@ const BackButton = styled.div`
   font-size: 30px;
   text-align: center;
   line-height: 2;
+  z-index: 1;
+`;
+
+const ThemeToggle = styled.button<{ isDark: boolean }>`
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  width: 60px;
+  height: 30px;
+  background: ${({ theme }) => theme.gradient};
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  overflow: hidden;
+
+  div {
+    font-size: 20px;
+    line-height: 20px;
+    transition: all 0.3s linear;
+
+    &:first-child {
+      transform: ${(props) => (props.isDark ? 'translateY(100px)' : `translateY(0px)`)};
+    }
+
+    &:last-child {
+      transform: ${(props) => (!props.isDark ? 'translateY(100px)' : `translateY(0px)`)};
+    }
+  }
 `;
 
 interface RouteParams {
@@ -160,6 +199,10 @@ export interface PriceData {
 }
 
 function Coin() {
+  const isDark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
+
   const { coinId } = useParams<RouteParams>();
   const { state } = useLocation<RouteState>();
   const priceMatch = useRouteMatch('/:coinId/price');
@@ -203,6 +246,10 @@ function Coin() {
       </Link>
       <Header>
         <Title>{state?.name ? state.name : loading ? 'Loading..' : infoData?.name}</Title>
+        <ThemeToggle isDark={isDark} onClick={toggleDarkAtom}>
+          <div className="moon">🌜</div>
+          <div className="sun">🌞</div>
+        </ThemeToggle>
       </Header>
       {loading ? (
         <Loader>Loading...</Loader>

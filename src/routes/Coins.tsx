@@ -1,8 +1,13 @@
 import React from 'react';
 import { useQuery } from 'react-query';
 import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+
 import { fetchCoins } from '../api';
+
+import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { isDarkAtom } from '../atoms';
+
+import styled from 'styled-components';
 
 const Container = styled.div`
   padding: 0px 20px;
@@ -11,10 +16,10 @@ const Container = styled.div`
 `;
 
 const Header = styled.header`
+  position: relative;
   height: 10vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  line-height: 10vh;
+  text-align: center;
 `;
 
 const Title = styled.h1`
@@ -26,8 +31,8 @@ const ConinList = styled.ul``;
 
 const Coin = styled.li`
   margin: 0 0 20px;
-  background: #fff;
-  color: ${(props) => props.theme.bgColor};
+  background: ${(props) => props.theme.boxColor};
+  color: ${(props) => props.theme.textColor};
   border-radius: 15px;
 
   a {
@@ -44,6 +49,12 @@ const Coin = styled.li`
   }
 `;
 
+const Symbol = styled.span`
+  margin-left: 10px;
+  font-size: 10px;
+  color: #f00;
+`;
+
 const Loader = styled.span`
   display: block;
   text-align: center;
@@ -53,6 +64,37 @@ const Img = styled.img`
   margin-right: 10px;
   width: 35px;
   height: 35px;
+`;
+
+const ThemeToggle = styled.button<{ isDark: boolean }>`
+  padding: 5px;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  justify-content: space-between;
+  width: 60px;
+  height: 30px;
+  background: ${({ theme }) => theme.gradient};
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  overflow: hidden;
+
+  div {
+    font-size: 20px;
+    line-height: 20px;
+    transition: all 0.3s linear;
+
+    &:first-child {
+      transform: ${(props) => (props.isDark ? 'translateY(100px)' : `translateY(0px)`)};
+    }
+
+    &:last-child {
+      transform: ${(props) => (!props.isDark ? 'translateY(100px)' : `translateY(0px)`)};
+    }
+  }
 `;
 
 interface ICoins {
@@ -81,11 +123,18 @@ function Coins() {
 
   //* react-query 사용 후
   const { isLoading, data } = useQuery<ICoins[]>('allCoins', fetchCoins);
+  const isDark = useRecoilValue(isDarkAtom);
+  const setDarkAtom = useSetRecoilState(isDarkAtom);
+  const toggleDarkAtom = () => setDarkAtom((prev) => !prev);
 
   return (
     <Container>
       <Header>
         <Title>Crypto</Title>
+        <ThemeToggle isDark={isDark} onClick={toggleDarkAtom}>
+          <div className="moon">🌜</div>
+          <div className="sun">🌞</div>
+        </ThemeToggle>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
@@ -100,7 +149,8 @@ function Coins() {
                 }}
               >
                 <Img src={`https://cryptocurrencyliveprices.com/img/${coin.id}.png`}></Img>
-                {coin.name} &rarr;
+                {coin.name}
+                <Symbol>{coin.symbol}</Symbol>
               </Link>
             </Coin>
           ))}
