@@ -7,7 +7,7 @@ import { fetchCoins } from '../api';
 const Container = styled.div`
   padding: 0px 20px;
   margin: 0 auto;
-  max-width: 480px;
+  max-width: 540px;
 `;
 
 const Header = styled.header`
@@ -85,7 +85,7 @@ function Coins() {
   return (
     <Container>
       <Header>
-        <Title>코인</Title>
+        <Title>Crypto</Title>
       </Header>
       {isLoading ? (
         <Loader>Loading...</Loader>
@@ -95,7 +95,7 @@ function Coins() {
             <Coin key={coin.id}>
               <Link
                 to={{
-                  pathname: `/${coin.id}/chart`,
+                  pathname: `/${coin.id}/price`,
                   state: { name: coin.name },
                 }}
               >

@@ -10,7 +10,7 @@ const Container = styled.div`
   position: relative;
   padding: 0px 20px;
   margin: 0 auto;
-  max-width: 480px;
+  max-width: 540px;
 `;
 
 const Header = styled.header`
@@ -235,17 +235,17 @@ function Coin() {
           </Overview>
 
           <Tabs>
-            <Tab isActive={chartMatch !== null}>
-              <Link to={`/${coinId}/chart`}>CHART</Link>
-            </Tab>
             <Tab isActive={priceMatch !== null}>
               <Link to={`/${coinId}/price`}>PRICE</Link>
+            </Tab>
+            <Tab isActive={chartMatch !== null}>
+              <Link to={`/${coinId}/chart`}>CHART</Link>
             </Tab>
           </Tabs>
 
           <Switch>
             <Route path={`/:coinId/price`}>
-              <Price />
+              <Price coinId={coinId} />
             </Route>
             <Route path={`/:coinId/chart`}>
               <Chart coinId={coinId} />
