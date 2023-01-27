@@ -1,12 +1,17 @@
 import { useQuery } from 'react-query';
-import styled from 'styled-components';
-import { fetchCoinTickers } from '../api';
 import { PriceData } from './Coin';
+
+import { fetchCoinTickers } from '../api';
+
+import { useRecoilValue } from 'recoil';
+import { isDarkAtom } from '../atoms';
+
+import styled from 'styled-components';
 
 const Overview = styled.div`
   padding: 30px 20px;
   display: flex;
-  background: rgba(0, 0, 0, 0.5);
+  background: ${(props) => props.theme.boxColor};
   border-radius: 10px;
 `;
 
@@ -14,7 +19,8 @@ const OverviewItem = styled.div`
   margin-top: 10px;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid #fff;
+  border-bottom: 1px solid;
+  border-color: ${(props) => props.theme.borderColor};
 
   span:first-child {
     margin-right: 50px;
@@ -44,6 +50,7 @@ interface PriceProps {
 }
 
 function Price({ coinId }: PriceProps) {
+  const isDark = useRecoilValue(isDarkAtom);
   const { isLoading, data } = useQuery<PriceData>(
     ['chart', coinId],
     () => fetchCoinTickers(coinId),
@@ -75,7 +82,15 @@ function Price({ coinId }: PriceProps) {
           </Overview>
           <Overview style={{ justifyContent: 'space-between', marginTop: 20 }}>
             <div className="close">
-              <p style={{ marginBottom: 10, borderBottom: '1px solid #fff' }}>Prev. Close</p>
+              <p
+                style={{
+                  marginBottom: 10,
+                  borderBottom: '1px solid',
+                  borderColor: isDark === true ? '#fff' : '#000',
+                }}
+              >
+                Prev. Close
+              </p>
               <OverviewItem>
                 <span>Volume</span>
                 <span>{parseFloat(result!.volume_24h.toFixed(0)).toLocaleString()}</span>
@@ -92,7 +107,15 @@ function Price({ coinId }: PriceProps) {
               </OverviewItem>
             </div>
             <div className="open">
-              <p style={{ marginBottom: 10, borderBottom: '1px solid #fff' }}>Open</p>
+              <p
+                style={{
+                  marginBottom: 10,
+                  borderBottom: '1px solid',
+                  borderColor: isDark === true ? '#fff' : '#000',
+                }}
+              >
+                Open
+              </p>
               <OverviewItem>
                 <span>1-Day Vol. Change</span> <span>{result?.volume_24h_change_24h}</span>
               </OverviewItem>
