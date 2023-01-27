@@ -1,7 +1,6 @@
-import { useQuery } from 'react-query';
-import { PriceData } from './Coin';
+import { useEffect, useState } from 'react';
 
-import { fetchCoinTickers } from '../api';
+import { PriceData } from './Coin';
 
 import { useRecoilValue } from 'recoil';
 import { isDarkAtom } from '../atoms';
@@ -47,17 +46,17 @@ const Diff = styled.div<{ isPos: boolean }>`
 
 interface PriceProps {
   coinId: string;
+  tikersData?: PriceData;
 }
 
-function Price({ coinId }: PriceProps) {
+function Price({ coinId, tikersData }: PriceProps) {
   const isDark = useRecoilValue(isDarkAtom);
-  const { isLoading, data } = useQuery<PriceData>(
-    ['chart', coinId],
-    () => fetchCoinTickers(coinId),
-    {
-      refetchInterval: 10000,
-    }
-  );
+  const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState<PriceData>();
+  useEffect(() => {
+    setData(tikersData);
+    setIsLoading(false);
+  }, [coinId, tikersData]);
 
   const result = data?.quotes?.USD;
   const isPos = result?.percent_change_24h ? result?.percent_change_24h > 0 : false;
