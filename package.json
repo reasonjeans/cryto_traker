@@ -1,5 +1,6 @@
 {
   "name": "react-masterclass",
+  "homepage": "https://reasonjeans.github.io/cryto_traker/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
