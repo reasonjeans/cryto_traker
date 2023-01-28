@@ -20,10 +20,6 @@ const OverviewItem = styled.div`
   justify-content: space-between;
   border-bottom: 1px solid;
   border-color: ${(props) => props.theme.borderColor};
-
-  span:first-child {
-    margin-right: 50px;
-  }
 `;
 
 const Arrow = styled.span<{ isPos: boolean }>`
