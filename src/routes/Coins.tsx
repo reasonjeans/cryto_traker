@@ -82,9 +82,9 @@ const ThemeToggle = styled.button<{ isDark: boolean }>`
   cursor: pointer;
   overflow: hidden;
 
-  div {
+  span {
     font-size: 20px;
-    line-height: 20px;
+    line-height: 22px;
     transition: all 0.3s linear;
 
     &:first-child {
@@ -132,8 +132,8 @@ function Coins() {
       <Header>
         <Title>Crypto</Title>
         <ThemeToggle isDark={isDark} onClick={toggleDarkAtom}>
-          <div className="moon">🌜</div>
-          <div className="sun">🌞</div>
+          <span className="moon">🌜</span>
+          <span className="sun">🌞</span>
         </ThemeToggle>
       </Header>
       {isLoading ? (
