@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/cryto_traker/static/js/main.1c805de5.js",
+    "main.js": "/cryto_traker/static/js/main.3282be21.js",
     "index.html": "/cryto_traker/index.html",
-    "main.1c805de5.js.map": "/cryto_traker/static/js/main.1c805de5.js.map"
+    "main.3282be21.js.map": "/cryto_traker/static/js/main.3282be21.js.map"
   },
   "entrypoints": [
-    "static/js/main.1c805de5.js"
+    "static/js/main.3282be21.js"
   ]
 }
