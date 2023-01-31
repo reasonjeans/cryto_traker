@@ -65,15 +65,18 @@ const Description = styled.p`
 const Tabs = styled.div`
   margin: 25px 0;
   display: flex;
-  justify-content: space-between;
+  border-bottom: 1px solid;
+  border-color: ${(props) => props.theme.textColor};
+
+  div:first-child {
+    margin-right: 20px;
+  }
 `;
 
 const Tab = styled.div<{ isActive: boolean }>`
   padding: 10px 0;
-  width: 210px;
-  background: ${(props) => props.theme.boxColor};
   color: ${(props) => (props.isActive ? props.theme.accentColor : props.theme.textColor)};
-  border-radius: 10px;
+  border-bottom: 3px solid ${(props) => (props.isActive ? props.theme.accentColor : 'transparent')};
   text-align: center;
 
   a {
